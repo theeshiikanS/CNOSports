@@ -9,7 +9,7 @@ var BALL_RUN_DATA = {
         ["Theesiik", "Carry+", "0-1", "--", "--", "--", ""],
         ["Earl", "Body-", "1-1", "--", "--", "--", ""],
         ["Stefan", "Liability+", "0-0", "--", "--", "--", ""],
-        ["Thomas", "Cardio", "0-0", "--", "--", "--", "https://github.com/theeshiikanS/CNOSports/blob/6b37d8e960a4f21d2167594cb13f5d6cc39f8183/FBD49003-B77E-4985-AD8B-3CFBF8F287EC.jpeg"],
+        ["Thomas", "Cardio", "0-0", "5'2", "--", "--", "https://github.com/theeshiikanS/CNOSports/blob/6b37d8e960a4f21d2167594cb13f5d6cc39f8183/FBD49003-B77E-4985-AD8B-3CFBF8F287EC.jpeg"],
         ["Anish", "Body", "0-0", "--", "--", "--", ""],
         ["Mario", "yn-", "0-0", "--", "--", "--", ""],
         ["Krishaal", "mid", "0-0", "--", "--", "--", ""],

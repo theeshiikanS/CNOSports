@@ -15,7 +15,7 @@ var BALL_RUN_DATA = {
         ["Krishaal", "mid", "0-0", "--", "--", "--", ""],
         ["Gurjot", "Liability+", "0-1", "--", "--", "--", ""],
         ["Ethan", "Mid", "0-1", "--", "--", "--", ""],
-        ["Jason", "Carry-", "0-1", "--", "--", "--", ""]
+        ["Jason", "Carry-", "0-1", "--", "--", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"]
     ],
     history: [
         // Format: { desc: "What changed", date: "Date", author: "Who", reviewers: "Who reviewed" }

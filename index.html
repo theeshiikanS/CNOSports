@@ -16,7 +16,7 @@
             
             /* Tier Colors */
             --tier-carry: #2ecc71;
-            --tier-mid: #f1c40f;
+            --tier-Staple: #f1c40f;
             --tier-body: #e67e22;
             --tier-liability: #e74c3c;
             --tier-cardio: #95a5a6;
@@ -190,7 +190,7 @@
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div><span class="badge" style="background: rgba(155, 89, 182, 0.15); color: #8e44ad;">yn</span> (Peak)</div>
                     <div><span class="badge" style="background: rgba(46, 204, 113, 0.15); color: #27ae60;">Carry</span></div>
-                    <div><span class="badge" style="background: rgba(241, 196, 15, 0.15); color: #b7950b;">Mid</span></div>
+                    <div><span class="badge" style="background: rgba(241, 196, 15, 0.15); color: #b7950b;">Staple</span></div>
                     <div><span class="badge" style="background: rgba(230, 126, 34, 0.15); color: #d35400;">Body</span></div>
                     <div><span class="badge" style="background: rgba(231, 76, 60, 0.15); color: #c0392b;">Liability</span></div>
                     <div><span class="badge" style="background: rgba(149, 165, 166, 0.15); color: #7f8c8d;">Cardio</span></div>
@@ -237,7 +237,7 @@
     function getBadgeClass(rankingStr) {
         const lower = rankingStr.toLowerCase();
         if (lower.includes('carry')) return 'background: rgba(46, 204, 113, 0.15); color: #27ae60;';
-        if (lower.includes('mid')) return 'background: rgba(241, 196, 15, 0.15); color: #b7950b;';
+        if (lower.includes('Staple')) return 'background: rgba(241, 196, 15, 0.15); color: #b7950b;';
         if (lower.includes('body')) return 'background: rgba(230, 126, 34, 0.15); color: #d35400;';
         if (lower.includes('liability')) return 'background: rgba(231, 76, 60, 0.15); color: #c0392b;';
         if (lower.includes('cardio')) return 'background: rgba(149, 165, 166, 0.15); color: #7f8c8d;';

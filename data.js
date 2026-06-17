@@ -20,7 +20,8 @@ var BALL_RUN_DATA = {
         ["Jason", "Carry--", "1-1", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"]
         ["Jewella", "Body+++", "2-2", "--", "--", "--", ""],
         ["Andrew", "yn-", "2-3", "--", "--", "--", ""],
-        ["Rishi", "Staple", "2-3", "--", "--", "--", ""]
+        ["Rishi", "Staple", "2-3", "--", "--", "--", ""],
+        ["Josh", "Body", "3-1", "--", "--", "--", ""]
     ],
     history: [
         // Format: { desc: "What changed", date: "Date", author: "Who", reviewers: "Who reviewed" }

@@ -4,7 +4,7 @@
 var BALL_RUN_DATA = {
     players: [
         // Format: ["Name", "Tier/Ranking", "Record", "Height", "Weight", "Wingspan", "Photo URL"]
-        ["Calvin", "Carry-", "6-3", "6'1"", "147 lbs", "6'3\"", "calvin.jpeg"],
+        ["Calvin", "Carry-", "6-3", "6'1", "147 lbs", "6'3\"", "calvin.jpeg"],
         ["Karnveer", "Staple+", "6-4", "6'1", "209", "--", "karnveer.jpeg"],
         ["Theesik", "Carry-", "5-6", "6'3", "194", "--", ""],
         ["Earl", "Body", "6-5", "6'0", "155", "--", "earl.jpeg"],

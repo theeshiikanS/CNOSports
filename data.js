@@ -17,7 +17,7 @@ var BALL_RUN_DATA = {
         ["Kheirthan", "Liability-", "0-2", "6'2", "205", "--", ""],
         ["Gurjot", "Liability+++", "4-4", "6'1", "210", "--", "gurjot.jpeg"],
         ["Ethan", "Staple++", "4-3", "6'3", "165", "--", ""],
-        ["Jason", "Carry--", "1-1", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"]
+        ["Jason", "Carry--", "1-1", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"],
         ["Jewella", "Body+++", "2-2", "--", "--", "--", ""],
         ["Andrew", "yn-", "2-3", "--", "--", "--", ""],
         ["Rishi", "Staple", "2-3", "--", "--", "--", ""],

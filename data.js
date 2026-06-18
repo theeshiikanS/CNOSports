@@ -4,10 +4,10 @@
 var BALL_RUN_DATA = {
     players: [
         // Format: ["Name", "Tier/Ranking", "Record", "Height", "Weight", "Wingspan", "Photo URL"]
-        ["Calvin", "Carry-", "6-3", "6'1", "147 lbs", "6'3\"", "calvin.jpeg"],
-        ["Karnveer", "Staple+", "6-4", "6'1", "209", "--", "karnveer.jpeg"],
-        ["Theesik", "Carry-", "5-6", "6'3", "194", "--", ""],
-        ["Earl", "Body", "6-5", "6'0", "155", "--", "earl.jpeg"],
+        ["Calvin", "Carry-", "6-8", "6'1", "147 lbs", "6'3\"", "calvin.jpeg"],
+        ["Karnveer", "Staple+", "8-7", "6'1", "209", "--", "karnveer.jpeg"],
+        ["Theesik", "Carry-", "10-6", "6'3", "194", "--", ""],
+        ["Earl", "Body", "6-9", "6'0", "155", "--", "earl.jpeg"],
         ["Stefan", "Body", "4-1", "5'11", "180", "--", "stefan.jpeg"],
         ["Thomas", "Body", "3-4", "5'2", "171", "--", "thomas.jpeg"],
         ["Anish", "Chuckly YN", "0-1", "--", "--", "--", "chuckles.jpeg"],
@@ -17,9 +17,9 @@ var BALL_RUN_DATA = {
         ["Kheirthan", "Liability-", "0-2", "6'2", "205", "--", ""],
         ["Gurjot", "Liability+++", "4-4", "6'1", "210", "--", "gurjot.jpeg"],
         ["Ethan", "Staple++", "4-3", "6'3", "165", "--", ""],
-        ["Jason", "Carry--", "1-1", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"],
-        ["Jewella", "Body+++", "2-2", "--", "--", "--", ""],
-        ["Andrew", "yn-", "2-3", "--", "--", "--", ""],
+        ["Jason", "Carry---", "2-2", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"],
+        ["Jewella", "Body+++", "6-2", "--", "--", "--", ""],
+        ["Andrew", "yn-", "5-4", "--", "--", "--", ""],
         ["Rishi", "Staple", "2-3", "--", "--", "--", ""],
         ["Josh", "Body", "3-1", "--", "--", "--", ""]
     ],

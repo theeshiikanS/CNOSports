@@ -16,7 +16,7 @@
             
             /* Tier Colors */
             --tier-carry: #2ecc71;
-            --tier-Staple: #f1c40f;
+            --tier-staple: #f1c40f;
             --tier-body: #e67e22;
             --tier-liability: #e74c3c;
             --tier-cardio: #95a5a6;
@@ -169,7 +169,7 @@
 
     <div class="dashboard-grid">
         <main class="card">
-            <h2>Player Leaderboard <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Click a name to see bio stats)</span></h2>
+            <h2>Player Leaderboard <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Sorted Peak to Low)</span></h2>
             <div class="table-container">
                 <table>
                     <thead>
@@ -234,19 +234,46 @@
 <script src="data.js"></script>
 
 <script>
+    // 1. Define the sorted hierarchy logic rules (Higher score = Higher ranking position)
+    function getTierScore(tierStr) {
+        const lower = tierStr.toLowerCase();
+        
+        if (lower.includes('chuckles') || lower.includes('chuckly')) return 60;
+        if (lower.includes('yn')) return 50;
+        if (lower.includes('carry')) return 40;
+        if (lower.includes('staple')) return 30;
+        if (lower.includes('body')) return 20;
+        if (lower.includes('liability')) return 10;
+        if (lower.includes('cardio')) return 0;
+        return -1; // Unknown fallback flag
+    }
+
+    // 2. Secondary calculation rule helper to evaluate modifier sub-ranks like '+' and '-'
+    function getModifierAdjustment(tierStr) {
+        if (tierStr.includes('+++')) return 0.3;
+        if (tierStr.includes('++')) return 0.2;
+        if (tierStr.includes('+')) return 0.1;
+        if (tierStr.includes('---')) return -0.3;
+        if (tierStr.includes('--')) return -0.2;
+        if (tierStr.includes('-')) return -0.1;
+        return 0;
+    }
+
     function getBadgeClass(rankingStr) {
         const lower = rankingStr.toLowerCase();
         if (lower.includes('carry')) return 'background: rgba(46, 204, 113, 0.15); color: #27ae60;';
-        if (lower.includes('Staple')) return 'background: rgba(241, 196, 15, 0.15); color: #b7950b;';
+        if (lower.includes('staple')) return 'background: rgba(241, 196, 15, 0.15); color: #b7950b;';
         if (lower.includes('body')) return 'background: rgba(230, 126, 34, 0.15); color: #d35400;';
         if (lower.includes('liability')) return 'background: rgba(231, 76, 60, 0.15); color: #c0392b;';
         if (lower.includes('cardio')) return 'background: rgba(149, 165, 166, 0.15); color: #7f8c8d;';
-        if (lower.includes('yn')) return 'background: rgba(155, 89, 182, 0.15); color: #8e44ad;';
+        if (lower.includes('yn') || lower.includes('chuckles')) return 'background: rgba(155, 89, 182, 0.15); color: #8e44ad;';
         return 'background: rgba(52, 152, 219, 0.15); color: #2980b9;'; 
     }
 
     function showPlayerModal(idx) {
         if (!window.BALL_RUN_DATA || !BALL_RUN_DATA.players) return;
+        
+        // Use data-index identifier attribute mapping logic to fetch exact player card positions
         const player = BALL_RUN_DATA.players[idx];
         
         document.getElementById('modalName').innerText = player[0];
@@ -271,19 +298,34 @@
     }
 
     function renderDashboard() {
-        // Validation safety net if data.js file isn't linked up correctly
         if (!window.BALL_RUN_DATA) {
             document.getElementById('tableBody').innerHTML = `<tr><td colspan="3" style="color: red; text-align:center; font-weight:bold; padding:30px;">Error: data.js file not detected in this folder!</td></tr>`;
             return;
         }
 
-        // Render Leaderboard Rows
+        // 3. Map original array positions into index references before executing sorting routines
+        const sortedPlayersWithIndexes = BALL_RUN_DATA.players.map((player, index) => {
+            const baseScore = getTierScore(player[1]);
+            const adjustment = getModifierAdjustment(player[1]);
+            return {
+                data: player,
+                originalIndex: index,
+                finalScore: baseScore + adjustment
+            };
+        });
+
+        // 4. Sort calculations descending (Highest calculation score down to lowest values)
+        sortedPlayersWithIndexes.sort((a, b) => b.finalScore - a.finalScore);
+
+        // Render sorted calculation arrays into view rows
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '';
-        BALL_RUN_DATA.players.forEach((row, idx) => {
+        
+        sortedPlayersWithIndexes.forEach(playerObj => {
+            const row = playerObj.data;
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><a class="player-link" onclick="showPlayerModal(${idx})">${row[0]}</a></td>
+                <td><a class="player-link" onclick="showPlayerModal(${playerObj.originalIndex})">${row[0]}</a></td>
                 <td><span class="badge" style="${getBadgeClass(row[1])}">${row[1]}</span></td>
                 <td class="record">${row[2]}</td>
             `;
@@ -305,7 +347,6 @@
         });
     }
 
-    // Launch UI paint routine immediately
     renderDashboard();
 </script>
 </body>

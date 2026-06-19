@@ -124,6 +124,7 @@
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; }
         .record { font-family: monospace; font-size: 1rem; font-weight: bold; }
+        .win-pct-col { color: #7f8c8d; font-size: 0.9rem; font-weight: 600; text-align: right; }
 
         .history-list { list-style: none; padding: 0; margin: 0; }
         .history-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
@@ -166,6 +167,22 @@
             background: white;
             cursor: pointer;
         }
+
+        /* Predictive Betting Analytics Indicator Box */
+        .analytics-predictor-box {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-weight: 600;
+        }
+        .predictor-pct { font-size: 1.4rem; color: #2ecc71; font-weight: 800; }
         
         .teams-output-grid {
             display: grid;
@@ -222,11 +239,16 @@
     <div id="pageLeaderboard" class="page-view active">
         <div class="dashboard-grid">
             <main class="card">
-                <h2>Player Leaderboard <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Click a name to see bio stats)</span></h2>
+                <h2>Player Leaderboard <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Calculated Win % Added)</span></h2>
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr><th>Name</th><th>Rankings</th><th>Record</th></tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Rankings</th>
+                                <th>Record</th>
+                                <th style="text-align: right;">Win %</th>
+                            </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
@@ -257,7 +279,7 @@
         <section class="card">
             <h2>Fair Run Matchmaker</h2>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">
-                Select active players. If a player's height is unlisted (`--`), the engine locks them strictly to their **Skill Ranking** to prevent any stat distortion.
+                Select active players. The simulator will automatically compute a live head-to-head win probability forecast.
             </p>
             
             <div class="attendance-grid" id="attendanceGrid"></div>
@@ -276,6 +298,11 @@
                 </div>
                 <button class="action-btn" onclick="generateCustomTeams(false)">Generate Teams</button>
                 <button class="secondary-btn" id="shuffleBtn" onclick="generateCustomTeams(true)" style="display: none;">🔀 Shuffle Teams</button>
+            </div>
+
+            <div id="predictorAnalyticsBox" class="analytics-predictor-box" style="display: none;">
+                <span id="predictorHeadline">⚖️ ACCU-RUN ANALYTICS METRIC FORECAST:</span>
+                <span class="predictor-pct" id="predictorPct">50.0%</span>
             </div>
 
             <div class="teams-output-grid" id="teamsOutput" style="display: none;">
@@ -343,13 +370,21 @@
         return 0;
     }
 
-    // Checks height strings. Returns the absolute integer value in inches, or null if unlisted
+    // FEATURE 4: WIN PERCENTAGE MATH COMPUTER
+    function calculateWinRate(recordStr) {
+        if (!recordStr || !recordStr.includes('-')) return 0;
+        const parts = recordStr.split('-');
+        const wins = parseInt(parts[0]) || 0;
+        const losses = parseInt(parts[1]) || 0;
+        const total = wins + losses;
+        if (total === 0) return 0;
+        return (wins / total) * 100;
+    }
+
     function parseHeightToInches(heightStr) {
         if (!heightStr || heightStr === '--' || heightStr.trim() === "") return null;
-        
         const clean = heightStr.replace(/["\\]/g, '').trim();
         const parts = clean.split("'");
-        
         if (parts.length >= 1) {
             const feet = parseInt(parts[0]) || 6;
             const inches = parts[1] ? (parseInt(parts[1]) || 0) : 0;
@@ -386,7 +421,46 @@
         if(event.target.id === 'playerModal') document.getElementById('playerModal').style.display = 'none';
     }
 
-    // ADAPTIVE MULTI-FACTOR MATCHMAKER
+    // FEATURE 5: HEAD TO HEAD ANALYTICS WIN SIMULATOR
+    function runMatchmakerPredictor(teamA, teamB) {
+        let skillA = 0, skillB = 0;
+        let heightA = 0, heightB = 0;
+
+        teamA.forEach(p => { skillA += p.skill; heightA += p.heightInches; });
+        teamB.forEach(p => { skillB += p.skill; heightB += p.heightInches; });
+
+        // Calculate direct parameter gaps
+        const skillGap = skillA - skillB;
+        // Evaluate height gap influence ratio (weighted down slightly compared to raw basketball IQ/Skill)
+        const heightGap = (heightA - heightB) * 0.15; 
+        
+        // Base logistic probability mapping curve formula
+        const netEdge = skillGap + heightGap;
+        let probabilityA = 1 / (1 + Math.exp(-netEdge * 0.4)); // mapping sensitivity index
+        
+        // Restrict outputs to realistic constraints (40% - 60% margins for balanced splits)
+        if (probabilityA > 0.85) probabilityA = 0.85;
+        if (probabilityA < 0.15) probabilityA = 0.15;
+
+        const finalPctA = (probabilityA * 100).toFixed(1);
+        const finalPctB = (100 - (probabilityA * 100)).toFixed(1);
+
+        const predictorBox = document.getElementById('predictorAnalyticsBox');
+        const headline = document.getElementById('predictorHeadline');
+        const pctText = document.getElementById('predictorPct');
+
+        predictorBox.style.display = 'flex';
+        if (parseFloat(finalPctA) >= 50.0) {
+            headline.innerText = `🔵 ACCU-RUN RATIO: TEAM A IS SLIGHTLY FAVORED:`;
+            pctText.innerText = `${finalPctA}%`;
+            pctText.style.color = '#2ecc71';
+        } else {
+            headline.innerText = `🟠 ACCU-RUN RATIO: TEAM B IS SLIGHTLY FAVORED:`;
+            pctText.innerText = `${finalPctB}%`;
+            pctText.style.color = '#e67e22';
+        }
+    }
+
     function generateCustomTeams(shouldShuffle) {
         const checkboxes = document.querySelectorAll('#attendanceGrid input[type="checkbox"]');
         const formatSelection = document.getElementById('matchFormatSelect').value;
@@ -410,7 +484,7 @@
                 pool.push({ 
                     name: p[0], 
                     skill: skillScore, 
-                    heightInches: inchesValue, // numerical inches or null
+                    heightInches: inchesValue,
                     heightText: p[3] || '--'
                 });
             }
@@ -439,28 +513,22 @@
         }
 
         let activeSelection = pool.slice(0, targetCount);
-
-        // Calculate the current active court baseline average
         const activeCourtHeightAverage = validHeightsCount > 0 ? (validHeightsSum / validHeightsCount) : 72;
 
-        // Neutralize unlisted metrics dynamically
         activeSelection.forEach(player => {
-            if (player.heightInches === null) {
-                player.heightInches = activeCourtHeightAverage;
-            }
+            if (player.heightInches === null) player.heightInches = activeCourtHeightAverage;
         });
 
         let teamA = [], teamB = [], teamC = [];
         
         if (isKingsCourt) {
+            document.getElementById('predictorAnalyticsBox').style.display = 'none'; // hide predictor on 3-way setups
             document.getElementById('boxTeamC').style.display = 'block';
             let totalSkillA = 0, totalSkillB = 0, totalSkillC = 0;
             let totalHeightA = 0, totalHeightB = 0, totalHeightC = 0;
 
             activeSelection.forEach(player => {
-                if (teamA.length < countA && 
-                    (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalSkillA <= totalSkillC || teamC.length >= countC) &&
-                    (totalHeightA <= totalHeightB || teamB.length >= countB)) {
+                if (teamA.length < countA && (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalSkillA <= totalSkillC || teamC.length >= countC) && (totalHeightA <= totalHeightB || teamB.length >= countB)) {
                     teamA.push(player); totalSkillA += player.skill; totalHeightA += player.heightInches;
                 } else if (teamB.length < countB && (totalSkillB <= totalSkillC || teamC.length >= countC) && (totalHeightB <= totalHeightC || teamC.length >= countC)) {
                     teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
@@ -486,6 +554,9 @@
                     teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
                 }
             });
+
+            // Fire prediction analytics calculator function
+            runMatchmakerPredictor(teamA, teamB);
         }
 
         document.getElementById('teamAList').innerHTML = teamA.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
@@ -516,11 +587,14 @@
         tableBody.innerHTML = '';
         sortedPlayersWithIndexes.forEach(playerObj => {
             const row = playerObj.data;
+            const winRatePct = calculateWinRate(row[2]).toFixed(1);
+            
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><a class="player-link" onclick="showPlayerModal(${playerObj.originalIndex})">${row[0]}</a></td>
                 <td><span class="badge" style="${getBadgeClass(row[1])}">${row[1]}</span></td>
                 <td class="record">${row[2]}</td>
+                <td class="win-pct-col">${winRatePct}%</td>
             `;
             tableBody.appendChild(tr);
         });

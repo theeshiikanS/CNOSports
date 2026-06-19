@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CNO Ball Run Rankings</title>
+    <title>Team Ball Run Rankings</title>
     <style>
         :root {
             --bg-color: #f4f7f6;
@@ -104,6 +104,39 @@
             color: var(--primary-color);
         }
 
+        /* Leaderboard Sort Header Controls */
+        .leaderboard-header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .leaderboard-header-area h2 { margin: 0; }
+        
+        .toggle-group {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 6px;
+        }
+        .toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .toggle-btn.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
         /* Tables & Links */
         .table-container { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -124,7 +157,7 @@
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; }
         .record { font-family: monospace; font-size: 1rem; font-weight: bold; }
-        .win-pct-col { color: #7f8c8d; font-size: 0.9rem; font-weight: 600; text-align: right; }
+        .win-pct-col { color: #2c3e50; font-size: 0.95rem; font-weight: 700; text-align: right; }
 
         .history-list { list-style: none; padding: 0; margin: 0; }
         .history-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
@@ -168,7 +201,7 @@
             cursor: pointer;
         }
 
-        /* Predictive Betting Analytics Indicator Box */
+        /* Predictive Analytics Indicator Box */
         .analytics-predictor-box {
             background: #2c3e50;
             color: white;
@@ -229,7 +262,7 @@
 
 <div class="container">
     <header>
-        <h1>CNO Ball Run Rankings</h1>
+        <h1>Team Ball Run Rankings</h1>
         <nav class="nav-tabs">
             <button id="tabLeaderboard" class="nav-btn active" onclick="switchPage('leaderboard')">Leaderboard</button>
             <button id="tabMatchmaker" class="nav-btn" onclick="switchPage('matchmaker')">Team Matchmaker</button>
@@ -239,7 +272,14 @@
     <div id="pageLeaderboard" class="page-view active">
         <div class="dashboard-grid">
             <main class="card">
-                <h2>Player Leaderboard <span style="font-size:0.85rem; color:var(--text-muted); font-weight:normal;">(Calculated Win % Added)</span></h2>
+                <div class="leaderboard-header-area">
+                    <h2>Player Leaderboard</h2>
+                    <div class="toggle-group">
+                        <button id="sortModeTier" class="toggle-btn active" onclick="setLeaderboardSort('tier')">Sort by Tier</button>
+                        <button id="sortModeWinPct" class="toggle-btn" onclick="setLeaderboardSort('winpct')">Sort by Win %</button>
+                    </div>
+                </div>
+
                 <div class="table-container">
                     <table>
                         <thead>
@@ -341,11 +381,22 @@
 <script src="data.js"></script>
 
 <script>
+    // Global tracker variable for sorting mode choices
+    let currentSortMode = 'tier';
+
     function switchPage(pageName) {
         document.getElementById('tabLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('tabMatchmaker').classList.toggle('active', pageName === 'matchmaker');
         document.getElementById('pageLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('pageMatchmaker').classList.toggle('active', pageName === 'matchmaker');
+    }
+
+    // Toggle click execution router for changing layout order options
+    function setLeaderboardSort(mode) {
+        currentSortMode = mode;
+        document.getElementById('sortModeTier').classList.toggle('active', mode === 'tier');
+        document.getElementById('sortModeWinPct').classList.toggle('active', mode === 'winpct');
+        renderDashboard(); // Re-render leaderboard immediately with new filter
     }
 
     function getTierScore(tierStr) {
@@ -370,7 +421,6 @@
         return 0;
     }
 
-    // FEATURE 4: WIN PERCENTAGE MATH COMPUTER
     function calculateWinRate(recordStr) {
         if (!recordStr || !recordStr.includes('-')) return 0;
         const parts = recordStr.split('-');
@@ -421,7 +471,6 @@
         if(event.target.id === 'playerModal') document.getElementById('playerModal').style.display = 'none';
     }
 
-    // FEATURE 5: HEAD TO HEAD ANALYTICS WIN SIMULATOR
     function runMatchmakerPredictor(teamA, teamB) {
         let skillA = 0, skillB = 0;
         let heightA = 0, heightB = 0;
@@ -429,16 +478,12 @@
         teamA.forEach(p => { skillA += p.skill; heightA += p.heightInches; });
         teamB.forEach(p => { skillB += p.skill; heightB += p.heightInches; });
 
-        // Calculate direct parameter gaps
         const skillGap = skillA - skillB;
-        // Evaluate height gap influence ratio (weighted down slightly compared to raw basketball IQ/Skill)
         const heightGap = (heightA - heightB) * 0.15; 
         
-        // Base logistic probability mapping curve formula
         const netEdge = skillGap + heightGap;
-        let probabilityA = 1 / (1 + Math.exp(-netEdge * 0.4)); // mapping sensitivity index
+        let probabilityA = 1 / (1 + Math.exp(-netEdge * 0.4));
         
-        // Restrict outputs to realistic constraints (40% - 60% margins for balanced splits)
         if (probabilityA > 0.85) probabilityA = 0.85;
         if (probabilityA < 0.15) probabilityA = 0.15;
 
@@ -451,11 +496,11 @@
 
         predictorBox.style.display = 'flex';
         if (parseFloat(finalPctA) >= 50.0) {
-            headline.innerText = `🔵 Winning Odds: TEAM A IS SLIGHTLY FAVORED:`;
+            headline.innerText = `🔵 ACCU-RUN RATIO: TEAM A IS SLIGHTLY FAVORED:`;
             pctText.innerText = `${finalPctA}%`;
             pctText.style.color = '#2ecc71';
         } else {
-            headline.innerText = `🟠 Winning Odds: TEAM B IS SLIGHTLY FAVORED:`;
+            headline.innerText = `🟠 ACCU-RUN RATIO: TEAM B IS SLIGHTLY FAVORED:`;
             pctText.innerText = `${finalPctB}%`;
             pctText.style.color = '#e67e22';
         }
@@ -522,7 +567,7 @@
         let teamA = [], teamB = [], teamC = [];
         
         if (isKingsCourt) {
-            document.getElementById('predictorAnalyticsBox').style.display = 'none'; // hide predictor on 3-way setups
+            document.getElementById('predictorAnalyticsBox').style.display = 'none';
             document.getElementById('boxTeamC').style.display = 'block';
             let totalSkillA = 0, totalSkillB = 0, totalSkillC = 0;
             let totalHeightA = 0, totalHeightB = 0, totalHeightC = 0;
@@ -555,7 +600,6 @@
                 }
             });
 
-            // Fire prediction analytics calculator function
             runMatchmakerPredictor(teamA, teamB);
         }
 
@@ -568,6 +612,7 @@
     function renderDashboard() {
         if (!window.BALL_RUN_DATA) return;
 
+        // Render Attendance checklist sorted alphabetically
         const attendanceGrid = document.getElementById('attendanceGrid');
         const sortedByName = BALL_RUN_DATA.players.map((p, i) => ({player: p, originalIndex: i})).sort((a, b) => a.player[0].localeCompare(b.player[0]));
         
@@ -578,23 +623,36 @@
             </label>
         `).join('');
 
-        const sortedPlayersWithIndexes = BALL_RUN_DATA.players.map((player, index) => {
-            return { data: player, originalIndex: index, finalScore: getTierScore(player[1]) + getModifierAdjustment(player[1]) };
+        // Prepare sorting object matrix with all pre-computed metric points
+        const leaderboardData = BALL_RUN_DATA.players.map((player, index) => {
+            return {
+                data: player,
+                originalIndex: index,
+                tierScore: getTierScore(player[1]) + getModifierAdjustment(player[1]),
+                winRate: calculateWinRate(player[2])
+            };
         });
-        sortedPlayersWithIndexes.sort((a, b) => b.finalScore - a.finalScore);
 
+        // CHOOSE INTERCEPTOR EVALUATION RULES BASED ON SELECTION SWITCHES
+        if (currentSortMode === 'tier') {
+            // Rank descending
+            leaderboardData.sort((a, b) => b.tierScore - a.tierScore);
+        } else if (currentSortMode === 'winpct') {
+            // Win percentage descending
+            leaderboardData.sort((a, b) => b.winRate - a.winRate);
+        }
+
+        // Render rows into table body
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '';
-        sortedPlayersWithIndexes.forEach(playerObj => {
+        leaderboardData.forEach(playerObj => {
             const row = playerObj.data;
-            const winRatePct = calculateWinRate(row[2]).toFixed(1);
-            
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><a class="player-link" onclick="showPlayerModal(${playerObj.originalIndex})">${row[0]}</a></td>
                 <td><span class="badge" style="${getBadgeClass(row[1])}">${row[1]}</span></td>
                 <td class="record">${row[2]}</td>
-                <td class="win-pct-col">${winRatePct}%</td>
+                <td class="win-pct-col">${playerObj.winRate.toFixed(1)}%</td>
             `;
             tableBody.appendChild(tr);
         });

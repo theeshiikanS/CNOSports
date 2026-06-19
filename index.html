@@ -104,7 +104,7 @@
             color: var(--primary-color);
         }
 
-        /* Leaderboard Sort Header Controls */
+        /* Leaderboard Sort Controls */
         .leaderboard-header-area {
             display: flex;
             justify-content: space-between;
@@ -150,10 +150,7 @@
             cursor: pointer;
             font-weight: bold;
         }
-        .player-link:hover {
-            color: var(--accent-color);
-            text-decoration: underline;
-        }
+        .player-link:hover { color: var(--accent-color); text-decoration: underline; }
 
         .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; }
         .record { font-family: monospace; font-size: 1rem; font-weight: bold; }
@@ -165,65 +162,16 @@
         .history-desc { font-size: 0.95rem; font-weight: 500; }
         .history-people { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* Matchmaker Interface Elements */
-        .attendance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .check-item {
-            display: flex;
-            align-items: center;
-            background: #f8fafc;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
+        /* Matchmaker Elements */
+        .attendance-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .check-item { display: flex; align-items: center; background: #f8fafc; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.9rem; }
         .check-item input { margin-right: 8px; cursor: pointer; }
-        
-        .setup-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .select-input {
-            padding: 8px 12px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            font-size: 0.95rem;
-            outline: none;
-            background: white;
-            cursor: pointer;
-        }
+        .setup-controls { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .select-input { padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.95rem; outline: none; background: white; cursor: pointer; }
 
-        /* Predictive Analytics Indicator Box */
-        .analytics-predictor-box {
-            background: #2c3e50;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-weight: 600;
-        }
+        .analytics-predictor-box { background: #2c3e50; color: white; padding: 15px 20px; border-radius: 8px; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-weight: 600; }
         .predictor-pct { font-size: 1.4rem; color: #2ecc71; font-weight: 800; }
-        
-        .teams-output-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 15px;
-        }
-        
+        .teams-output-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 15px; }
         .team-box { padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); }
         .team-a-box { background: rgba(52, 152, 219, 0.06); border-left: 5px solid #3498db; }
         .team-b-box { background: rgba(230, 126, 34, 0.06); border-left: 5px solid #e67e22; }
@@ -231,24 +179,61 @@
         .team-ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
         .team-ul li { padding: 6px 0; border-bottom: 1px dashed #cbd5e1; font-weight: 500; display: flex; justify-content: space-between; }
         .team-ul li span.player-size { color: var(--text-muted); font-size: 0.85rem; font-weight: normal; }
-        .team-ul li:last-child { border-bottom: none; }
         
-        .action-btn { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; }
-        .action-btn:hover { background: #2980b9; }
-        .secondary-btn { background: #e2e8f0; color: var(--primary-color); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; }
-        .secondary-btn:hover { background: #cbd5e1; }
-
-        /* Bio Modal Layout */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(3px);
-            justify-content: center;
+        /* 1v1 Tournament Bracket Visual Grid System */
+        .bracket-container {
+            display: flex;
             align-items: center;
-            z-index: 1000;
+            gap: 25px;
+            overflow-x: auto;
+            padding: 15px 5px;
         }
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            min-width: 210px;
+            height: 640px; /* Enhanced height boundaries to scale 16-node bracket splits */
+        }
+        .round-title {
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .bracket-matchup {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .bracket-slot {
+            padding: 6px 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            background: white;
+            border-left: 3px solid #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+        }
+        .bracket-slot.top-seed { border-left-color: var(--accent-color); }
+        .bracket-slot.bye-slot { color: #94a3b8; font-style: italic; background: #f1f5f9; border-left-color: #cbd5e1; }
+        .bracket-slot span.seed-no { font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-right: 5px;}
+
+        /* Profile Modal Layout */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background-color: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
         .close-modal { position: absolute; top: 12px; right: 18px; font-size: 1.8rem; cursor: pointer; color: var(--text-muted); }
         .close-modal:hover { color: #000; }
@@ -266,6 +251,7 @@
         <nav class="nav-tabs">
             <button id="tabLeaderboard" class="nav-btn active" onclick="switchPage('leaderboard')">Leaderboard</button>
             <button id="tabMatchmaker" class="nav-btn" onclick="switchPage('matchmaker')">Team Matchmaker</button>
+            <button id="tabTournament" class="nav-btn" onclick="switchPage('tournament')">👑 1v1 Bracket</button>
         </nav>
     </header>
 
@@ -279,16 +265,10 @@
                         <button id="sortModeWinPct" class="toggle-btn" onclick="setLeaderboardSort('winpct')">Sort by Win %</button>
                     </div>
                 </div>
-
                 <div class="table-container">
                     <table>
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Rankings</th>
-                                <th>Record</th>
-                                <th style="text-align: right;">Win %</th>
-                            </tr>
+                            <tr><th>Name</th><th>Rankings</th><th>Record</th><th style="text-align: right;">Win %</th></tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
@@ -321,9 +301,7 @@
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">
                 Select active players. The simulator will automatically compute a live head-to-head win probability forecast.
             </p>
-            
             <div class="attendance-grid" id="attendanceGrid"></div>
-            
             <div class="setup-controls">
                 <div>
                     <label style="font-weight:600; margin-right: 5px;">Run Format:</label>
@@ -339,24 +317,58 @@
                 <button class="action-btn" onclick="generateCustomTeams(false)">Generate Teams</button>
                 <button class="secondary-btn" id="shuffleBtn" onclick="generateCustomTeams(true)" style="display: none;">🔀 Shuffle Teams</button>
             </div>
-
             <div id="predictorAnalyticsBox" class="analytics-predictor-box" style="display: none;">
                 <span id="predictorHeadline">⚖️ ACCU-RUN ANALYTICS METRIC FORECAST:</span>
                 <span class="predictor-pct" id="predictorPct">50.0%</span>
             </div>
-
             <div class="teams-output-grid" id="teamsOutput" style="display: none;">
-                <div class="team-box team-a-box" id="boxTeamA">
-                    <h3 style="margin: 0; color: #2980b9;">🔵 Team A</h3>
-                    <ul class="team-ul" id="teamAList"></ul>
+                <div class="team-box team-a-box" id="boxTeamA"><h3 style="margin: 0; color: #2980b9;">🔵 Team A</h3><ul class="team-ul" id="teamAList"></ul></div>
+                <div class="team-box team-b-box" id="boxTeamB"><h3 style="margin: 0; color: #d35400;">🟠 Team B</h3><ul class="team-ul" id="teamBList"></ul></div>
+                <div class="team-box team-c-box" id="boxTeamC" style="display: none;"><h3 style="margin: 0; color: #9b59b6;">🟣 Team C (King's Court)</h3><ul class="team-ul" id="teamCList"></ul></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="pageTournament" class="page-view">
+        <section class="card">
+            <h2>👑 1v1 Tournament Roster Bracket (11 Contenders)</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 20px;">
+                Includes qualifiers with >5 games, plus requested wildcards (**Julian, Krishaal, Thomas, Jason, Stefan**). Top 5 seeds receive a Round 1 Bye.
+            </p>
+            
+            <div class="bracket-container" id="bracketLayoutContainer">
+                <div>
+                    <div class="round-title">Round 1 (Play-ins)</div>
+                    <div class="bracket-round" id="roundOf16"></div>
                 </div>
-                <div class="team-box team-b-box" id="boxTeamB">
-                    <h3 style="margin: 0; color: #d35400;">🟠 Team B</h3>
-                    <ul class="team-ul" id="teamBList"></ul>
+                
+                <div>
+                    <div class="round-title">Quarterfinals</div>
+                    <div class="bracket-round" id="roundQuarterfinals"></div>
                 </div>
-                <div class="team-box team-c-box" id="boxTeamC" style="display: none;">
-                    <h3 style="margin: 0; color: #9b59b6;">🟣 Team C (King's Court)</h3>
-                    <ul class="team-ul" id="teamCList"></ul>
+                
+                <div>
+                    <div class="round-title">Semifinals</div>
+                    <div class="bracket-round">
+                        <div class="bracket-matchup">
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic;">QF1 Winner</div>
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic;">QF4 Winner</div>
+                        </div>
+                        <div class="bracket-matchup">
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic;">QF2 Winner</div>
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic;">QF3 Winner</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="round-title">Finals</div>
+                    <div class="bracket-round">
+                        <div class="bracket-matchup" style="border: 2px solid #f1c40f;">
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic; background: rgba(241, 196, 15, 0.04);">SF1 Winner</div>
+                            <div class="bracket-slot" style="color: #94a3b8; font-style: italic; background: rgba(241, 196, 15, 0.04);">SF2 Winner</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -381,22 +393,23 @@
 <script src="data.js"></script>
 
 <script>
-    // Global tracker variable for sorting mode choices
     let currentSortMode = 'tier';
 
     function switchPage(pageName) {
         document.getElementById('tabLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('tabMatchmaker').classList.toggle('active', pageName === 'matchmaker');
+        document.getElementById('tabTournament').classList.toggle('active', pageName === 'tournament');
+        
         document.getElementById('pageLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('pageMatchmaker').classList.toggle('active', pageName === 'matchmaker');
+        document.getElementById('pageTournament').classList.toggle('active', pageName === 'tournament');
     }
 
-    // Toggle click execution router for changing layout order options
     function setLeaderboardSort(mode) {
         currentSortMode = mode;
         document.getElementById('sortModeTier').classList.toggle('active', mode === 'tier');
         document.getElementById('sortModeWinPct').classList.toggle('active', mode === 'winpct');
-        renderDashboard(); // Re-render leaderboard immediately with new filter
+        renderDashboard();
     }
 
     function getTierScore(tierStr) {
@@ -471,178 +484,185 @@
         if(event.target.id === 'playerModal') document.getElementById('playerModal').style.display = 'none';
     }
 
-    function runMatchmakerPredictor(teamA, teamB) {
-        let skillA = 0, skillB = 0;
-        let heightA = 0, heightB = 0;
+    // AUTOMATED 16-NODE TOURNAMENT SEEDER ENGINE
+    function buildBalancedTournamentBracket() {
+        if (!window.BALL_RUN_DATA || !BALL_RUN_DATA.players) return;
 
+        let contestants = [];
+        const forcedPlayers = ['julian', 'krishaal', 'thomas', 'jason', 'stefan'];
+
+        BALL_RUN_DATA.players.forEach(p => {
+            const name = p[0];
+            const recordStr = p[2] || "0-0";
+            const parts = recordStr.split('-');
+            const totalGames = (parseInt(parts[0]) || 0) + (parseInt(parts[1]) || 0);
+            
+            // Inclusion rules: >5 games OR explicitly requested name matching
+            if (totalGames > 5 || forcedPlayers.includes(name.toLowerCase())) {
+                const score = getTierScore(p[1]) + getModifierAdjustment(p[1]);
+                contestants.push({ name: name, score: score, tier: p[1] });
+            }
+        });
+
+        // Rank by tier hierarchy descending
+        contestants.sort((a, b) => b.score - a.score);
+
+        const r1Container = document.getElementById('roundOf16');
+        const qfContainer = document.getElementById('roundQuarterfinals');
+        r1Container.innerHTML = '';
+        qfContainer.innerHTML = '';
+
+        // Standard 16-seed matching blueprint tree index pairings configuration mapping arrays
+        // format: [TopSeedIndex, BottomSeedIndex] where indices >= contestants.length become a "Bye"
+        const r1PairingsBlueprint = [
+            [0, 15], [7, 8],  // Feeds QF1 branch
+            [3, 12], [4, 11], // Feeds QF2 branch
+            [1, 14], [6, 9],  // Feeds QF3 branch
+            [2, 13], [5, 10]  // Feeds QF4 branch
+        ];
+
+        // Process Round 1 grid visual items mapping layouts
+        r1PairingsBlueprint.forEach((pair, matchIdx) => {
+            const topPlayer = contestants[pair[0]];
+            const bottomPlayer = contestants[pair[1]];
+
+            const matchDiv = document.createElement('div');
+            matchDiv.className = 'bracket-matchup';
+            matchDiv.innerHTML = `<div style="font-size:0.7rem; color:var(--text-muted); font-weight:bold;">R1 MATCH ${matchIdx + 1}</div>`;
+
+            // Render Top Slot
+            if (topPlayer) {
+                matchDiv.innerHTML += `
+                    <div class="bracket-slot top-seed">
+                        <span><span class="seed-no">#${pair[0]+1}</span><strong>${topPlayer.name}</strong></span>
+                    </div>`;
+            } else {
+                matchDiv.innerHTML += `<div class="bracket-slot bye-slot">Empty Slot</div>`;
+            }
+
+            // Render Bottom Slot
+            if (bottomPlayer) {
+                matchDiv.innerHTML += `
+                    <div class="bracket-slot">
+                        <span><span class="seed-no">#${pair[1]+1}</span><strong>${bottomPlayer.name}</strong></span>
+                    </div>`;
+            } else {
+                matchDiv.innerHTML += `<div class="bracket-slot bye-slot">⚖️ BYE (Advance)</div>`;
+            }
+
+            r1Container.appendChild(matchDiv);
+        });
+
+        // Process Round 2 (Quarterfinals) structural mapping elements display loops
+        // Groups R1 winners into pairs of two to show who feeds what QF slot branch
+        for (let i = 0; i < 4; i++) {
+            const topPair = r1PairingsBlueprint[i * 2];
+            const bottomPair = r1PairingsBlueprint[(i * 2) + 1];
+
+            // Evaluate if top-seed receives automatic advancement due to bottom-bye
+            const qfTopText = topPair[1] >= contestants.length ? `#${topPair[0] + 1} ${contestants[topPair[0]].name} (BYE)` : `R1 M${(i*2)+1} Winner`;
+            const qfBottomText = bottomPair[1] >= contestants.length ? `#${bottomPair[0] + 1} ${contestants[bottomPair[0]].name} (BYE)` : `R1 M${(i*2)+2} Winner`;
+
+            const qfDiv = document.createElement('div');
+            qfDiv.className = 'bracket-matchup';
+            qfDiv.innerHTML = `
+                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:bold;">QUARTERFINAL ${i + 1}</div>
+                <div class="bracket-slot top-seed" style="${topPair[1] >= contestants.length ? 'background:#f0fdf4;' : ''}">
+                    <span>${qfTopText}</span>
+                </div>
+                <div class="bracket-slot" style="${bottomPair[1] >= contestants.length ? 'background:#f0fdf4;' : ''}">
+                    <span>${qfBottomText}</span>
+                </div>
+            `;
+            qfContainer.appendChild(qfDiv);
+        }
+    }
+
+    function runMatchmakerPredictor(teamA, teamB) {
+        let skillA = 0, skillB = 0; let heightA = 0, heightB = 0;
         teamA.forEach(p => { skillA += p.skill; heightA += p.heightInches; });
         teamB.forEach(p => { skillB += p.skill; heightB += p.heightInches; });
-
-        const skillGap = skillA - skillB;
-        const heightGap = (heightA - heightB) * 0.15; 
-        
+        const skillGap = skillA - skillB; const heightGap = (heightA - heightB) * 0.15; 
         const netEdge = skillGap + heightGap;
         let probabilityA = 1 / (1 + Math.exp(-netEdge * 0.4));
-        
-        if (probabilityA > 0.85) probabilityA = 0.85;
-        if (probabilityA < 0.15) probabilityA = 0.15;
-
-        const finalPctA = (probabilityA * 100).toFixed(1);
-        const finalPctB = (100 - (probabilityA * 100)).toFixed(1);
-
+        if (probabilityA > 0.85) probabilityA = 0.85; if (probabilityA < 0.15) probabilityA = 0.15;
+        const finalPctA = (probabilityA * 100).toFixed(1); const finalPctB = (100 - (probabilityA * 100)).toFixed(1);
         const predictorBox = document.getElementById('predictorAnalyticsBox');
-        const headline = document.getElementById('predictorHeadline');
-        const pctText = document.getElementById('predictorPct');
-
+        const headline = document.getElementById('predictorHeadline'); const pctText = document.getElementById('predictorPct');
         predictorBox.style.display = 'flex';
         if (parseFloat(finalPctA) >= 50.0) {
-            headline.innerText = `🔵 ACCU-RUN RATIO: TEAM A IS SLIGHTLY FAVORED:`;
-            pctText.innerText = `${finalPctA}%`;
-            pctText.style.color = '#2ecc71';
+            headline.innerText = `🔵 ACCU-RUN RATIO: TEAM A IS SLIGHTLY FAVORED:`; pctText.innerText = `${finalPctA}%`; pctText.style.color = '#2ecc71';
         } else {
-            headline.innerText = `🟠 ACCU-RUN RATIO: TEAM B IS SLIGHTLY FAVORED:`;
-            pctText.innerText = `${finalPctB}%`;
-            pctText.style.color = '#e67e22';
+            headline.innerText = `🟠 ACCU-RUN RATIO: TEAM B IS SLIGHTLY FAVORED:`; pctText.innerText = `${finalPctB}%`; pctText.style.color = '#e67e22';
         }
     }
 
     function generateCustomTeams(shouldShuffle) {
         const checkboxes = document.querySelectorAll('#attendanceGrid input[type="checkbox"]');
         const formatSelection = document.getElementById('matchFormatSelect').value;
-        
-        let pool = [];
-        let validHeightsSum = 0;
-        let validHeightsCount = 0;
-
+        let pool = []; let validHeightsSum = 0; let validHeightsCount = 0;
         checkboxes.forEach(cb => {
             if (cb.checked) {
-                const idx = parseInt(cb.value);
-                const p = BALL_RUN_DATA.players[idx];
-                const skillScore = getTierScore(p[1]) + getModifierAdjustment(p[1]);
-                const inchesValue = parseHeightToInches(p[3]);
-                
-                if (inchesValue !== null) {
-                    validHeightsSum += inchesValue;
-                    validHeightsCount++;
-                }
-
-                pool.push({ 
-                    name: p[0], 
-                    skill: skillScore, 
-                    heightInches: inchesValue,
-                    heightText: p[3] || '--'
-                });
+                const idx = parseInt(cb.value); const p = BALL_RUN_DATA.players[idx];
+                const skillScore = getTierScore(p[1]) + getModifierAdjustment(p[1]); const inchesValue = parseHeightToInches(p[3]);
+                if (inchesValue !== null) { validHeightsSum += inchesValue; validHeightsCount++; }
+                pool.push({ name: p[0], skill: skillScore, heightInches: inchesValue, heightText: p[3] || '--' });
             }
         });
-
-        let targetCount = pool.length;
-        let countA = 0, countB = 0, countC = 0;
-        let isKingsCourt = false;
-
+        let targetCount = pool.length; let countA = 0, countB = 0, countC = 0; let isKingsCourt = false;
         if (formatSelection === "3v3")   { targetCount = 6;  countA = 3; countB = 3; }
         if (formatSelection === "4v3")   { targetCount = 7;  countA = 4; countB = 3; }
         if (formatSelection === "4v4")   { targetCount = 8;  countA = 4; countB = 4; }
         if (formatSelection === "5v5")   { targetCount = 10; countA = 5; countB = 5; }
         if (formatSelection === "3v3v3") { targetCount = 9;  countA = 3; countB = 3; countC = 3; isKingsCourt = true; }
-
-        if (pool.length < targetCount) {
-            alert(`You selected the ${formatSelection} format, but only checked off ${pool.length} players. Please select at least ${targetCount} players.`);
-            return;
-        }
-
+        if (pool.length < targetCount) { alert(`You selected the ${formatSelection} format, but only checked off ${pool.length} players. Please select at least ${targetCount} players.`); return; }
         if (shouldShuffle) {
-            pool.forEach(p => { p.tempScore = p.skill + (Math.random() - 0.5); });
-            pool.sort((a, b) => b.tempScore - a.tempScore);
-        } else {
-            pool.sort((a, b) => b.skill - a.skill);
-        }
-
+            pool.forEach(p => { p.tempScore = p.skill + (Math.random() - 0.5); }); pool.sort((a, b) => b.tempScore - a.tempScore);
+        } else { pool.sort((a, b) => b.skill - a.skill); }
         let activeSelection = pool.slice(0, targetCount);
         const activeCourtHeightAverage = validHeightsCount > 0 ? (validHeightsSum / validHeightsCount) : 72;
-
-        activeSelection.forEach(player => {
-            if (player.heightInches === null) player.heightInches = activeCourtHeightAverage;
-        });
-
+        activeSelection.forEach(player => { if (player.heightInches === null) player.heightInches = activeCourtHeightAverage; });
         let teamA = [], teamB = [], teamC = [];
-        
         if (isKingsCourt) {
-            document.getElementById('predictorAnalyticsBox').style.display = 'none';
-            document.getElementById('boxTeamC').style.display = 'block';
-            let totalSkillA = 0, totalSkillB = 0, totalSkillC = 0;
-            let totalHeightA = 0, totalHeightB = 0, totalHeightC = 0;
-
+            document.getElementById('predictorAnalyticsBox').style.display = 'none'; document.getElementById('boxTeamC').style.display = 'block';
+            let totalSkillA = 0, totalSkillB = 0, totalSkillC = 0; let totalHeightA = 0, totalHeightB = 0, totalHeightC = 0;
             activeSelection.forEach(player => {
                 if (teamA.length < countA && (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalSkillA <= totalSkillC || teamC.length >= countC) && (totalHeightA <= totalHeightB || teamB.length >= countB)) {
                     teamA.push(player); totalSkillA += player.skill; totalHeightA += player.heightInches;
                 } else if (teamB.length < countB && (totalSkillB <= totalSkillC || teamC.length >= countC) && (totalHeightB <= totalHeightC || teamC.length >= countC)) {
                     teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
-                } else {
-                    teamC.push(player); totalSkillC += player.skill; totalHeightC += player.heightInches;
-                }
+                } else { teamC.push(player); totalSkillC += player.skill; totalHeightC += player.heightInches; }
             });
             document.getElementById('teamCList').innerHTML = teamC.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
         } else {
-            document.getElementById('boxTeamC').style.display = 'none';
-            let totalSkillA = 0, totalSkillB = 0;
-            let totalHeightA = 0, totalHeightB = 0;
-
-            if(formatSelection === "auto") {
-                countA = Math.ceil(activeSelection.length / 2);
-                countB = Math.floor(activeSelection.length / 2);
-            }
-
+            document.getElementById('boxTeamC').style.display = 'none'; let totalSkillA = 0, totalSkillB = 0; let totalHeightA = 0, totalHeightB = 0;
+            if(formatSelection === "auto") { countA = Math.ceil(activeSelection.length / 2); countB = Math.floor(activeSelection.length / 2); }
             activeSelection.forEach(player => {
                 if (teamA.length < countA && (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalHeightA <= totalHeightB || teamB.length >= countB)) {
                     teamA.push(player); totalSkillA += player.skill; totalHeightA += player.heightInches;
-                } else {
-                    teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
-                }
+                } else { teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches; }
             });
-
             runMatchmakerPredictor(teamA, teamB);
         }
-
         document.getElementById('teamAList').innerHTML = teamA.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
         document.getElementById('teamBList').innerHTML = teamB.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
-        document.getElementById('teamsOutput').style.display = 'grid';
-        document.getElementById('shuffleBtn').style.display = 'inline-block';
+        document.getElementById('teamsOutput').style.display = 'grid'; document.getElementById('shuffleBtn').style.display = 'inline-block';
     }
 
     function renderDashboard() {
         if (!window.BALL_RUN_DATA) return;
-
-        // Render Attendance checklist sorted alphabetically
         const attendanceGrid = document.getElementById('attendanceGrid');
         const sortedByName = BALL_RUN_DATA.players.map((p, i) => ({player: p, originalIndex: i})).sort((a, b) => a.player[0].localeCompare(b.player[0]));
-        
         attendanceGrid.innerHTML = sortedByName.map(obj => `
-            <label class="check-item">
-                <input type="checkbox" value="${obj.originalIndex}">
-                <span>${obj.player[0]}</span>
-            </label>
+            <label class="check-item"><input type="checkbox" value="${obj.originalIndex}"><span>${obj.player[0]}</span></label>
         `).join('');
 
-        // Prepare sorting object matrix with all pre-computed metric points
         const leaderboardData = BALL_RUN_DATA.players.map((player, index) => {
-            return {
-                data: player,
-                originalIndex: index,
-                tierScore: getTierScore(player[1]) + getModifierAdjustment(player[1]),
-                winRate: calculateWinRate(player[2])
-            };
+            return { data: player, originalIndex: index, tierScore: getTierScore(player[1]) + getModifierAdjustment(player[1]), winRate: calculateWinRate(player[2]) };
         });
+        if (currentSortMode === 'tier') { leaderboardData.sort((a, b) => b.tierScore - a.tierScore); } 
+        else if (currentSortMode === 'winpct') { leaderboardData.sort((a, b) => b.winRate - a.winRate); }
 
-        // CHOOSE INTERCEPTOR EVALUATION RULES BASED ON SELECTION SWITCHES
-        if (currentSortMode === 'tier') {
-            // Rank descending
-            leaderboardData.sort((a, b) => b.tierScore - a.tierScore);
-        } else if (currentSortMode === 'winpct') {
-            // Win percentage descending
-            leaderboardData.sort((a, b) => b.winRate - a.winRate);
-        }
-
-        // Render rows into table body
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '';
         leaderboardData.forEach(playerObj => {
@@ -669,6 +689,8 @@
             `;
             historyList.appendChild(li);
         });
+
+        buildBalancedTournamentBracket();
     }
 
     renderDashboard();

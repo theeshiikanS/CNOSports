@@ -71,23 +71,12 @@
             transition: all 0.2s;
         }
 
-        .nav-btn:hover {
-            background: #cbd5e1;
-        }
+        .nav-btn:hover { background: #cbd5e1; }
+        .nav-btn.active { background: var(--accent-color); color: white; }
 
-        .nav-btn.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        /* Page Management Layouts */
-        .page-view {
-            display: none; /* Controlled via script switches */
-        }
-
-        .page-view.active {
-            display: block;
-        }
+        /* Page Views */
+        .page-view { display: none; }
+        .page-view.active { display: block; }
 
         .dashboard-grid {
             display: grid;
@@ -96,9 +85,7 @@
         }
 
         @media (max-width: 900px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
 
         .card {
@@ -144,7 +131,7 @@
         .history-desc { font-size: 0.95rem; font-weight: 500; }
         .history-people { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* Team Matchmaker Elements */
+        /* Matchmaker Interface Elements */
         .attendance-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -192,7 +179,8 @@
         .team-b-box { background: rgba(230, 126, 34, 0.06); border-left: 5px solid #e67e22; }
         .team-c-box { background: rgba(155, 89, 182, 0.06); border-left: 5px solid #9b59b6; }
         .team-ul { list-style: none; padding: 0; margin: 5px 0 0 0; }
-        .team-ul li { padding: 5px 0; border-bottom: 1px dashed #cbd5e1; font-weight: 500; }
+        .team-ul li { padding: 6px 0; border-bottom: 1px dashed #cbd5e1; font-weight: 500; display: flex; justify-content: space-between; }
+        .team-ul li span.player-size { color: var(--text-muted); font-size: 0.85rem; font-weight: normal; }
         .team-ul li:last-child { border-bottom: none; }
         
         .action-btn { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; }
@@ -200,7 +188,7 @@
         .secondary-btn { background: #e2e8f0; color: var(--primary-color); border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; }
         .secondary-btn:hover { background: #cbd5e1; }
 
-        /* Profile Modal Window */
+        /* Bio Modal Layout */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -269,7 +257,7 @@
         <section class="card">
             <h2>Fair Run Matchmaker</h2>
             <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">
-                Select active players and set your court run configuration rules.
+                Select active players. If a player's height is unlisted (`--`), the engine locks them strictly to their **Skill Ranking** to prevent any stat distortion.
             </p>
             
             <div class="attendance-grid" id="attendanceGrid"></div>
@@ -306,7 +294,6 @@
             </div>
         </section>
     </div>
-
 </div>
 
 <div id="playerModal" class="modal-overlay" onclick="closeModalWindow(event)">
@@ -327,13 +314,9 @@
 <script src="data.js"></script>
 
 <script>
-    // PAGE NAVIGATION SWITCH ENGINE
     function switchPage(pageName) {
-        // Toggle tab highlights
         document.getElementById('tabLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('tabMatchmaker').classList.toggle('active', pageName === 'matchmaker');
-        
-        // Toggle layout container blocks
         document.getElementById('pageLeaderboard').classList.toggle('active', pageName === 'leaderboard');
         document.getElementById('pageMatchmaker').classList.toggle('active', pageName === 'matchmaker');
     }
@@ -358,6 +341,21 @@
         if (tierStr.includes('--')) return -0.2;
         if (tierStr.includes('-')) return -0.1;
         return 0;
+    }
+
+    // Checks height strings. Returns the absolute integer value in inches, or null if unlisted
+    function parseHeightToInches(heightStr) {
+        if (!heightStr || heightStr === '--' || heightStr.trim() === "") return null;
+        
+        const clean = heightStr.replace(/["\\]/g, '').trim();
+        const parts = clean.split("'");
+        
+        if (parts.length >= 1) {
+            const feet = parseInt(parts[0]) || 6;
+            const inches = parts[1] ? (parseInt(parts[1]) || 0) : 0;
+            return (feet * 12) + inches;
+        }
+        return null;
     }
 
     function getBadgeClass(rankingStr) {
@@ -388,16 +386,33 @@
         if(event.target.id === 'playerModal') document.getElementById('playerModal').style.display = 'none';
     }
 
+    // ADAPTIVE MULTI-FACTOR MATCHMAKER
     function generateCustomTeams(shouldShuffle) {
         const checkboxes = document.querySelectorAll('#attendanceGrid input[type="checkbox"]');
         const formatSelection = document.getElementById('matchFormatSelect').value;
         
         let pool = [];
+        let validHeightsSum = 0;
+        let validHeightsCount = 0;
+
         checkboxes.forEach(cb => {
             if (cb.checked) {
                 const idx = parseInt(cb.value);
                 const p = BALL_RUN_DATA.players[idx];
-                pool.push({ name: p[0], score: getTierScore(p[1]) + getModifierAdjustment(p[1]) });
+                const skillScore = getTierScore(p[1]) + getModifierAdjustment(p[1]);
+                const inchesValue = parseHeightToInches(p[3]);
+                
+                if (inchesValue !== null) {
+                    validHeightsSum += inchesValue;
+                    validHeightsCount++;
+                }
+
+                pool.push({ 
+                    name: p[0], 
+                    skill: skillScore, 
+                    heightInches: inchesValue, // numerical inches or null
+                    heightText: p[3] || '--'
+                });
             }
         });
 
@@ -417,32 +432,47 @@
         }
 
         if (shouldShuffle) {
-            pool.forEach(p => { p.tempScore = p.score + (Math.random() - 0.5); });
+            pool.forEach(p => { p.tempScore = p.skill + (Math.random() - 0.5); });
             pool.sort((a, b) => b.tempScore - a.tempScore);
         } else {
-            pool.sort((a, b) => b.score - a.score);
+            pool.sort((a, b) => b.skill - a.skill);
         }
 
         let activeSelection = pool.slice(0, targetCount);
+
+        // Calculate the current active court baseline average
+        const activeCourtHeightAverage = validHeightsCount > 0 ? (validHeightsSum / validHeightsCount) : 72;
+
+        // Neutralize unlisted metrics dynamically
+        activeSelection.forEach(player => {
+            if (player.heightInches === null) {
+                player.heightInches = activeCourtHeightAverage;
+            }
+        });
+
         let teamA = [], teamB = [], teamC = [];
         
         if (isKingsCourt) {
             document.getElementById('boxTeamC').style.display = 'block';
-            let totalA = 0, totalB = 0, totalC = 0;
+            let totalSkillA = 0, totalSkillB = 0, totalSkillC = 0;
+            let totalHeightA = 0, totalHeightB = 0, totalHeightC = 0;
 
             activeSelection.forEach(player => {
-                if (teamA.length < countA && (totalA <= totalB || teamB.length >= countB) && (totalA <= totalC || teamC.length >= countC)) {
-                    teamA.push(player.name); totalA += player.score;
-                } else if (teamB.length < countB && (totalB <= totalC || teamC.length >= countC)) {
-                    teamB.push(player.name); totalB += player.score;
+                if (teamA.length < countA && 
+                    (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalSkillA <= totalSkillC || teamC.length >= countC) &&
+                    (totalHeightA <= totalHeightB || teamB.length >= countB)) {
+                    teamA.push(player); totalSkillA += player.skill; totalHeightA += player.heightInches;
+                } else if (teamB.length < countB && (totalSkillB <= totalSkillC || teamC.length >= countC) && (totalHeightB <= totalHeightC || teamC.length >= countC)) {
+                    teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
                 } else {
-                    teamC.push(player.name); totalC += player.score;
+                    teamC.push(player); totalSkillC += player.skill; totalHeightC += player.heightInches;
                 }
             });
-            document.getElementById('teamCList').innerHTML = teamC.map(p => `<li>${p}</li>`).join('');
+            document.getElementById('teamCList').innerHTML = teamC.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
         } else {
             document.getElementById('boxTeamC').style.display = 'none';
-            let totalA = 0, totalB = 0;
+            let totalSkillA = 0, totalSkillB = 0;
+            let totalHeightA = 0, totalHeightB = 0;
 
             if(formatSelection === "auto") {
                 countA = Math.ceil(activeSelection.length / 2);
@@ -450,16 +480,16 @@
             }
 
             activeSelection.forEach(player => {
-                if (teamA.length < countA && (totalA <= totalB || teamB.length >= countB)) {
-                    teamA.push(player.name); totalA += player.score;
+                if (teamA.length < countA && (totalSkillA <= totalSkillB || teamB.length >= countB) && (totalHeightA <= totalHeightB || teamB.length >= countB)) {
+                    teamA.push(player); totalSkillA += player.skill; totalHeightA += player.heightInches;
                 } else {
-                    teamB.push(player.name); totalB += player.score;
+                    teamB.push(player); totalSkillB += player.skill; totalHeightB += player.heightInches;
                 }
             });
         }
 
-        document.getElementById('teamAList').innerHTML = teamA.map(p => `<li>${p}</li>`).join('');
-        document.getElementById('teamBList').innerHTML = teamB.map(p => `<li>${p}</li>`).join('');
+        document.getElementById('teamAList').innerHTML = teamA.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
+        document.getElementById('teamBList').innerHTML = teamB.map(p => `<li><span>${p.name}</span><span class="player-size">${p.heightText}</span></li>`).join('');
         document.getElementById('teamsOutput').style.display = 'grid';
         document.getElementById('shuffleBtn').style.display = 'inline-block';
     }

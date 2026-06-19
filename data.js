@@ -18,13 +18,14 @@ var BALL_RUN_DATA = {
         ["Gurjot", "Liability+++", "4-4", "6'1", "210", "--", "gk.JPG"],
         ["Ethan", "Staple++", "4-3", "6'3", "165", "--", ""],
         ["Jason", "Carry---", "2-2", "5'11", "160", "--", "3397DB0B-8B6E-4AD7-8ED7-B70F0323BBD6.jpeg"],
-        ["Jewella", "Body+++", "6-2", "--", "--", "--", ""],
+        ["Jewella", "Body++", "6-2", "--", "--", "--", ""],
         ["Andrew", "yn-", "5-4", "--", "--", "--", ""],
         ["Rishi", "Staple", "2-3", "--", "--", "--", ""],
         ["Josh", "Body", "3-1", "--", "--", "--", ""]
     ],
     history: [
         // Format: { desc: "What changed", date: "Date", author: "Who", reviewers: "Who reviewed" }
+        { desc: "Updated rankings from Ball run 17/6/26 and added new players", date: "6/18/2026", author: "TS", reviewers: "L3" },
         { desc: "Updated rankings from Ball run 15/6/26 and added new players", date: "6/17/2026", author: "TS", reviewers: "L3" },
         { desc: "Updated rankings and added Julian and KT", date: "6/10/2026", author: "TS", reviewers: "EDSG, SR" },
         { desc: "Removed Cardio and added BUMM, Updated rankings", date: "6/9/2026", author: "CB", reviewers: "TS, SR" },
